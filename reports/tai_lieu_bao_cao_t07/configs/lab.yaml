@@ -1,0 +1,18 @@
+lab: t07
+group:
+  name: null
+  members: []
+pipeline:
+  implemented_stages:
+    - detect
+detection:
+  confidence: 0.25
+  device: env
+  allowed_labels:
+    - face
+    - plate
+  model_supplied_by_caller: true
+  label_map:
+    face: face
+    license_plate: plate
+    plate: plate
