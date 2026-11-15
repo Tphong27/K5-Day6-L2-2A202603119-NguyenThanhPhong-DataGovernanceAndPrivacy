@@ -1,0 +1,17 @@
+{
+  "status": "REWORK",
+  "reason_code": "REVIEW_ESCALATED",
+  "reason": "2 queued regions were escalated.",
+  "owner": "Nguyen Thanh Phong (Data Owner)",
+  "scope": "t07-poc",
+  "evidence": [
+    "out/poc/redactions.csv",
+    "out/poc/review_queue.csv",
+    "out/poc/audit_log.jsonl"
+  ],
+  "metrics": {
+    "escalated": 2,
+    "pending": 0
+  },
+  "canonical": "REWORK"
+}

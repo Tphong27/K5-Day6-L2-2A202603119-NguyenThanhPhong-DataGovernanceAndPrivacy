@@ -1,0 +1,16 @@
+rank,item_id,score,reason,suggested_action,slice,evidence_path,reviewer,reviewer_decision,override_value,review_note,reviewed_at
+1,poc:pii_08:002,0.566761,plate conf=0.43 | edge_shape_plate; low-confidence review priority,check: reject or edit,type=plate|size=medium,images/pii_08.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+2,poc:pii_07:002,0.521655,plate conf=0.48 | edge_shape_plate; low-confidence review priority,check: reject or edit,type=plate|size=medium,images/pii_07.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+3,poc:pii_40:001,0.51643,face conf=0.48 | declared_synthetic_shape_fallback; low-confidence review priority,check: reject or edit,type=face|size=medium,images/pii_40.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+4,poc:pii_40:004,0.506458,plate conf=0.49 | edge_shape_plate; low-confidence review priority,check: reject or edit,type=plate|size=medium,images/pii_40.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+5,poc:pii_54:000,0.504093,face conf=0.5 | declared_synthetic_shape_fallback; low-confidence review priority,check: reject or edit,type=face|size=small,images/pii_54.jpg,han,escalate,,plate,2026-11-15T05:19:49.021Z
+6,poc:pii_25:001,0.503982,face conf=0.5 | declared_synthetic_shape_fallback; low-confidence review priority,check: reject or edit,type=face|size=small,images/pii_25.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+7,poc:pii_49:004,0.492343,plate conf=0.51 | edge_shape_plate; low-confidence review priority,approve,type=plate|size=medium,images/pii_49.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+8,poc:pii_48:006,0.487056,face conf=0.51 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=small,images/pii_48.jpg,han,approve,,,2026-11-15T05:19:49.021Z
+9,poc:pii_48:003,0.484673,plate conf=0.52 | edge_shape_plate; low-confidence review priority,approve,type=plate|size=small,images/pii_48.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+10,poc:pii_12:000,0.479255,face conf=0.52 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=small,images/pii_12.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+11,poc:pii_45:003,0.476675,face conf=0.52 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=small,images/pii_45.jpg,han,escalate,,,2026-11-15T05:19:49.021Z
+12,poc:pii_32:002,0.462116,face conf=0.54 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=medium,images/pii_32.jpg,han,approve,,,2026-11-15T05:19:49.021Z
+13,poc:pii_57:005,0.456666,face conf=0.54 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=small,images/pii_57.jpg,han,reject,,,2026-11-15T05:19:49.021Z
+14,poc:pii_58:002,0.454305,face conf=0.55 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=medium,images/pii_58.jpg,han,approve,,,2026-11-15T05:19:49.021Z
+15,poc:pii_45:002,0.452204,face conf=0.55 | declared_synthetic_shape_fallback; low-confidence review priority,approve,type=face|size=small,images/pii_45.jpg,han,reject,,,2026-11-15T05:19:49.021Z
