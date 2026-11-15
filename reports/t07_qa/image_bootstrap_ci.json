@@ -1,0 +1,26 @@
+[
+  {
+    "run": "baseline",
+    "n_bootstrap": 2000,
+    "n_valid": 2000,
+    "seed": 42,
+    "image_bootstrap95_low": 0.23144444444444445,
+    "image_bootstrap95_high": 0.423728813559322
+  },
+  {
+    "run": "poc",
+    "n_bootstrap": 2000,
+    "n_valid": 2000,
+    "seed": 42,
+    "image_bootstrap95_low": 0.23144444444444445,
+    "image_bootstrap95_high": 0.423728813559322
+  },
+  {
+    "run": "blur_all",
+    "n_bootstrap": 2000,
+    "n_valid": 2000,
+    "seed": 42,
+    "image_bootstrap95_low": 0.0,
+    "image_bootstrap95_high": 0.0
+  }
+]
