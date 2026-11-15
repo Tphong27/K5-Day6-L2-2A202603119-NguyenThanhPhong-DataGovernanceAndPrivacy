@@ -10,7 +10,7 @@
 |---|---|
 | Group ID | 2A202603119 |
 | Challenge | T07 · Automatic Face/Plate Redaction + Review Queue |
-| Thành viên (5–6) + vai trò | 1. ____ (Detector/redactor/ranking) · 2. Nguyễn Thanh Phong (Baseline & data protocol) · 3. ____ (Human review, audit & export) · 4. ____ (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh (Lead integration, decision, report & demo) |
+| Thành viên (5–6) + vai trò | 1. ____ (Detector/redactor/ranking) · 2. Nguyễn Thanh Phong (Baseline & data protocol) · 3. ____ (Human review, audit & export) · 4. Lương Văn Quyến (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh (Lead integration, decision, report & demo) |
 | Git URL | https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy |
 | Tag `demo-180m` (commit) | ____ |
 | Tag `final-24h` (commit) | ____ |
@@ -61,21 +61,51 @@
 
 ## 05 · Evaluation protocol
 
-- Công thức primary metric, đơn vị đánh giá, TP/FP/FN, denominator: PII Miss Rate = số vùng GT có pixel coverage < 0.9 / tổng số vùng GT cần redact; đơn vị đánh giá là vùng PII; lower is better. Primary chỉ hợp lệ khi over-redaction rate ≤ 0.3.
-- Threshold / budget B / K và lúc chốt: coverage threshold 0.9, review budget B=15, over-redaction guardrail 0.3 và seed 42; các giá trị được đóng băng trong config trước khi chạy eval.
-- Độ bất định (CI/bootstrap/variance) khi N nhỏ: ____
-- Lệnh evaluate chính xác: `python -m src.evaluate --track t__ --pred ... --out ...`
+> Đánh giá nội bộ bằng nhãn CVAT của nhóm, chưa phải GT chính thức. PoC hiện là `poc_prereview`, chưa hoàn tất human review.
+
+- Pham vi: 24 anh eval, 115 vung nhan CVAT. Nhan co the thieu/trung; manual counts ghi 130 vung PII tren 24 anh nay. Khong coi 115 la tong PII thuc te da duoc xac nhan.
+- Coverage cua moi vung nhan = pixel giao voi hop bbox redaction / pixel cua vung nhan. PII Miss Rate = so vung coverage < 0.9 / tong vung can redact. Don vi: vung PII; lower is better.
+- TP=77; FN=38; denominator=115. Miss rate=0.3304347826. Day la TP/FN theo coverage, khong phai ghep IoU. Evaluator khong tinh FP theo so bbox.
+- Over-redaction = pixel da che ngoai hop vung nhan / tong pixel da che = 85203/129085 = 0.6600534532. Guardrail <=0.3: FAIL. Khong ket luan primary dat yeu cau. Nhan thieu co the lam tang over-redaction do duoc.
+- Co dinh config truoc eval: coverage=0.9; guardrail=0.3; seed=42; review budget toi da B=15. Khong dieu chinh tham so theo ket qua eval. Baseline khong review; PoC con 15 pending, chua co review that.
+- Do bat dinh: Wilson CI 95%=[0.2511709254; 0.4206607705]. Image-cluster bootstrap CI 95%=[0.2314444444; 0.4237288136], 2000 lan, seed=42. Wilson gia dinh cac vung doc lap; bootstrap lay mau co hoan lai 24 anh, giu cum vung trong anh. CI khong khac phuc sai lech nhan.
+- GT chi duoc doc trong evaluation/report, khong doc trong production pipeline.
+- Lệnh tái tạo metric, slice, CI và bảng so sánh sau khi đã chạy Baseline/PoC theo [hướng dẫn QA](t07_qa/README.md):
+
+```powershell
+.\.venv\Scripts\python.exe -m tools.t07_slice_report
+```
+
+- Lệnh gọi riêng evaluator trên bản chuyển đổi nhãn nội bộ:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.evaluate --track t07 --gt out/t07_internal_eval/gt_regions.csv --split eval --pred out/baseline/redactions.csv --run-name baseline --out reports/t07_qa/evaluator_baseline.json
+.\.venv\Scripts\python.exe -m src.evaluate --track t07 --gt out/t07_internal_eval/gt_regions.csv --split eval --pred out/poc/redactions.csv --run-name poc_prereview --out reports/t07_qa/evaluator_poc.json
+```
+
+Các file `evaluator_*.json` là output trực tiếp dùng nhãn nội bộ. Script báo cáo bổ sung trạng thái nhãn, hash và runtime vào các file `reports/metrics_*.json` chuẩn để truy nguyên.
 
 ## 06 · Result slices
 
-| Slice | N | Baseline | PoC | Ghi chú |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
+Baseline/PoC là PII Miss Rate (fraction); N là số vùng nhãn CVAT, không phải số ảnh. Cột PoC là kết quả trước human review, chưa phải kết quả cuối của nhóm.
 
-- Failure case 1 (ảnh/metadata + root cause): ____
-- Failure case 2: ____
-- Latency / compute (máy, CPU, ms/item): ____
+| Slice | N | Baseline | PoC truoc review | Ghi chu |
+|---|---:|---:|---:|---|
+| all | 115 | 0.3304347826 | 0.3304347826 | 38 miss |
+| type=face | 71 | 0.0704225352 | 0.0704225352 | 5 miss |
+| type=plate | 44 | 0.7500000000 | 0.7500000000 | 33 miss |
+| size=small | 108 | 0.3425925926 | 0.3425925926 | 37 miss |
+| size=medium | 7 | 0.1428571429 | 0.1428571429 | 1 miss |
+| size=large | 0 | N/A | N/A | Khong co mau |
+
+- Failure case 1: pii_04, eval, plate, cvat:19, bbox [412.01,260.79,35.77,10.71], coverage=0. Du doan co 4 bbox tren anh nhung khong che vung nay. Gia thuyet: heuristic canh/hinh dang hoac loc candidate khong giu duoc vung phu hop; chua truy vet chinh xac cong doan gay loi. [Ảnh minh chứng](t07_qa/evidence/plate_pii_04_cvat_19.png).
+- Failure case 2: pii_01, eval, plate, cvat:8, bbox [485.81,330.96,51.62,14.32], coverage=0. Du doan co 4 bbox tren anh nhung khong che vung nay. Gia thuyet: heuristic canh/hinh dang khong tao/giu duoc candidate phu hop; can truy vet trung gian de xac nhan root cause.
+- Ảnh minh chứng failure case 2: [pii_01, cvat:8](t07_qa/evidence/plate_pii_01_cvat_8.png).
+- Vấn đề chất lượng nhãn riêng: `pii_03 / cvat:14` được gán `face` nhưng khung nằm trên áo. Cần xác minh nhãn; **không dùng case này để khẳng định detector bỏ sót khuôn mặt**. Nhãn vẫn được giữ nguyên trong phép tính. [Ảnh nhãn nghi sai](t07_qa/evidence/face_pii_03_cvat_14.png).
+- Size tính từ diện tích bbox nhãn CVAT: small <1024 px²; medium từ 1024 đến dưới 9216 px²; large ≥9216 px². Condition chưa có nhãn đáng tin cậy nên ghi `unknown`.
+- May: Windows-11-10.0.26300-SP0; Python 3.12.7; CPU: Intel64 Family 6 Model 141 Stepping 1, GenuineIntel.
+- Baseline: 0.3456 s / 60 anh = 5.760000 ms/anh. PoC: 0.7182 s / 60 anh = 11.970000 ms/anh. Mot lan do runtime pipeline tren toan bo 60 anh; khong gom thoi gian human review, khong phai benchmark rieng detector. Số liệu từ `reports/metrics_baseline.json` và `reports/metrics_poc.json`.
+- Production decision=REWORK/REVIEW_PENDING. GO cua code la trang thai review/van hanh, khong thay cho ket luan chat luong metric.
 
 ## 07 · Human & decision
 
