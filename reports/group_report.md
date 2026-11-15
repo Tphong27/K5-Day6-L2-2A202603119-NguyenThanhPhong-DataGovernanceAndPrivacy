@@ -4,6 +4,32 @@
 > (`reports/metrics_*.json`, `reports/table1_baseline_vs_poc.md`) — không gõ tay, không làm tròn mất đơn vị.
 > 3–5 trang (hoặc README + report.md tương đương).
 
+## CẦN BẠN XÁC NHẬN TRƯỚC KHI NỘP
+
+Các mục dưới đây không thể suy ra chắc chắn từ code hoặc Git. Nguyễn Nhật Minh
+cần xác nhận/điền trực tiếp; sau khi xác nhận thì xóa nhãn này:
+
+- [ ] **[CẦN XÁC NHẬN 1 — quyết định review]** Hân đã yêu cầu `approve` cho **cả hai** item
+  `poc:pii_54:000` và `poc:pii_45:003`, không chỉ một item.
+- [ ] **[CẦN XÁC NHẬN 2 — lý do review]** Nội dung ghi nhận hiện tại là “giữ vùng che
+  theo hướng fail-safe”. Hân chưa cung cấp lý do chi tiết khác; xác nhận có giữ nguyên
+  cách diễn đạt này không.
+- [ ] **[CẦN XÁC NHẬN 3 — Data Owner]** Người ký quyết định cuối là
+  `Nguyen Thanh Phong (Data Owner)` đúng với phân công thực tế của nhóm.
+- [ ] **[CẦN XÁC NHẬN 4 — contribution của Tuấn]** Nhóm đồng ý mô tả commit `a7e889a`
+  của Phạm Anh Tuấn là “detector prototype/report materials”, còn production fallback
+  nằm trong commit tích hợp của Nguyễn Nhật Minh.
+- [ ] **[CẦN ĐIỀN 5 — deadline]** Deadline chính xác theo giờ Việt Nam: `CHƯA CUNG CẤP`.
+- [ ] **[CẦN ĐIỀN 6 — presenter]** Thành viên thuyết trình/demo: `CHƯA CHỐT`.
+- [ ] **[CẦN QUYẾT ĐỊNH 7 — tag]** Có cần tạo `demo-180m` và `final-24h` không;
+  nếu có, chỉ tạo `final-24h` sau khi PR cuối đã merge và kiểm tra `main`.
+- [ ] **[CẦN XÁC NHẬN 8 — file nộp]** Giảng viên có yêu cầu file submission riêng
+  hay chỉ `reports/group_report.md`; hiện nhóm đã chuẩn bị thêm `reports/SUBMISSION.md`.
+
+Các mục **không cần xác nhận lại** vì đã có bằng chứng máy chạy: preflight/test exit 0,
+60 ảnh, 351 candidates, 341 final regions, 0 invalid boxes, review 5 approve/10 reject,
+decision GO, metrics nội bộ và over-redaction guardrail FAIL.
+
 ## 00 · Header
 
 | Mục | Giá trị |
@@ -12,9 +38,7 @@
 | Challenge | T07 · Automatic Face/Plate Redaction + Review Queue |
 | Thành viên (5–6) + vai trò | 1. Phạm Anh Tuấn — 2A202603232 (Detector prototype/materials) · 2. Nguyễn Thanh Phong — 2A202603119 (Baseline & data protocol) · 3. Huỳnh Ngọc Gia Hân — 2A202603128 (Human review, audit & export) · 4. Lương Văn Quyến — 2A202603226 (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh — 2A202603210 (Lead integration, decision, report & demo) |
 | Git URL | https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy |
-| Tag `demo-180m` (commit) | Chưa tạo — nhóm phải chốt trước khi nộp |
-| Tag `final-24h` (commit) | Chưa tạo — nhóm phải chốt sau kiểm tra cuối |
-| Deadline (giờ VN) | Chưa được nhóm cung cấp |
+
 
 ## 01 · Problem statement
 

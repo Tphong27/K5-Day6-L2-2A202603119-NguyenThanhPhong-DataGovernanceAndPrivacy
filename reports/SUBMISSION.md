@@ -1,5 +1,20 @@
 # T07 submission status
 
+## CẦN NGUYỄN NHẬT MINH XÁC NHẬN
+
+- [ ] Hân approve cả `poc:pii_54:000` và `poc:pii_45:003`.
+- [ ] Chấp nhận ghi lý do hai approval là giữ redaction theo hướng fail-safe; chưa có
+  lời giải thích chi tiết khác trực tiếp từ Hân.
+- [ ] Nguyễn Thanh Phong là Data Owner/người ký quyết định cuối.
+- [ ] Đồng ý cách ghi đóng góp của Phạm Anh Tuấn: commit `a7e889a` là prototype/materials,
+  production detector fallback do Nguyễn Nhật Minh tích hợp.
+- [ ] Điền deadline chính xác theo giờ Việt Nam.
+- [ ] Chốt người thuyết trình/demo.
+- [ ] Xác nhận có cần hai tag `demo-180m`, `final-24h` hay không.
+- [ ] Xác nhận giảng viên có cần `SUBMISSION.md` riêng hay chỉ cần `group_report.md`.
+
+Những số liệu kỹ thuật còn lại đã được script/test xác minh, không cần xác nhận thủ công.
+
 ## Nhóm
 
 | Vai trò | Thành viên | Mã học viên |
