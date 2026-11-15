@@ -150,11 +150,12 @@ pytest -q
 **Bảng 2 · Individual contribution evidence** (đối chiếu với `git shortlog -sne --all` và `reports/team_contributions.csv`)
 
 Nhóm xác nhận đã demo và được bonus point; không cung cấp tên presenter cá nhân nên cột cuối ghi ở mức “không ghi nhận”.
+Nguyễn Thanh Phong vô tình dùng hai Git identity: `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` cho các commit baseline và `ThanhPhong2004 <phongtrieu2048@gmail.com>` cho một số merge commit. Hai identity đều thuộc cùng thành viên 2A202603119; merge commit được ghi để đối chiếu lịch sử, không được tính thay cho đóng góp baseline thực chất.
 
 | Học viên | Git author/email | Module / vai trò | Commit SHA / diff chứng minh | Trình bày? |
 |---|---|---|---|---|
 | Phạm Anh Tuấn — 2A202603232 | `AnhTuan2003ml <tuankkffdnc@gmail.com>` | Detector prototype & report materials | `a7e889a` trên `origin/phong` — prototype detector/pipeline/test trong `reports/tai_lieu_bao_cao_t07/`; production fallback được tích hợp riêng bởi Nguyễn Nhật Minh | Không ghi nhận |
-| Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | `1ad7e5d` — offline baseline, blur-all và data protocol | Không ghi nhận |
+| Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>`; alias merge: `ThanhPhong2004 <phongtrieu2048@gmail.com>` | Baseline & data protocol | `1ad7e5d`, `5b16b69` — baseline/data work; merge evidence gồm `777d185`, `3f89e7b` | Không ghi nhận |
 | Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review ban đầu 15 item | Không ghi nhận |
 | Lương Văn Quyến — 2A202603226 | `VanQuyen11 <quyenluong2k4@gmail.com>` | QA, metric & failure analysis | `0042807`, `e35a73e` — integration QA, internal CVAT metrics, failure evidence | Không ghi nhận |
 | Nguyễn Nhật Minh — 2A202603210 | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, detector fallback, report & demo | `830338b` — contract/demo; `77bac99` — integrated T07 pipeline and detector fallback | Không ghi nhận |
