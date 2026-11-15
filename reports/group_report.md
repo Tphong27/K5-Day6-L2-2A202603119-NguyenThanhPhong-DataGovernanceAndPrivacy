@@ -10,11 +10,11 @@
 |---|---|
 | Group ID | 2A202603119 |
 | Challenge | T07 · Automatic Face/Plate Redaction + Review Queue |
-| Thành viên (5–6) + vai trò | 1. ____ (Detector/redactor/ranking) · 2. Nguyễn Thanh Phong (Baseline & data protocol) · 3. Huỳnh Ngọc Gia Hân (Human review, audit & export) · 4. Lương Văn Quyến (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh (Lead integration, decision, report & demo) |
+| Thành viên (5–6) + vai trò | 1. Phạm Anh Tuấn — 2A202603232 (Detector prototype/materials) · 2. Nguyễn Thanh Phong — 2A202603119 (Baseline & data protocol) · 3. Huỳnh Ngọc Gia Hân — 2A202603128 (Human review, audit & export) · 4. Lương Văn Quyến — 2A202603226 (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh — 2A202603210 (Lead integration, decision, report & demo) |
 | Git URL | https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy |
-| Tag `demo-180m` (commit) | ____ |
-| Tag `final-24h` (commit) | ____ |
-| Deadline (giờ VN) | ____ |
+| Tag `demo-180m` (commit) | Chưa tạo — nhóm phải chốt trước khi nộp |
+| Tag `final-24h` (commit) | Chưa tạo — nhóm phải chốt sau kiểm tra cuối |
+| Deadline (giờ VN) | Chưa được nhóm cung cấp |
 
 ## 01 · Problem statement
 
@@ -38,36 +38,36 @@
 
 ## 03 · Research & design
 
-- 2–3 references (URL + ngày xem) và **vì sao** chọn kỹ thuật: ____
+- 2–3 references (URL + ngày xem) và **vì sao** chọn kỹ thuật: OpenCV Contour Features và Morphological Transformations (xem 15/11/2026) được chọn vì PoC dùng contour, edge/shape và morphology hoàn toàn offline trên CPU; OpenCV License (xem 15/11/2026) xác nhận OpenCV từ 4.5.0 dùng Apache-2.0; EDPB Guidelines 01/2025 on Pseudonymisation (xem 15/11/2026) được dùng để tránh tuyên bố redaction đồng nghĩa anonymisation. URL đầy đủ ở mục 11.
 - Sơ đồ data flow (input → process → rank/QC → review → decision → report): `manifest/images → detector + padded candidate boxes → validation → risk score + top-15 review queue → approve/reject/edit/escalate → final redactions + redacted images → operational decision + evaluation report`.
-- Thành phần offline (model/weights + checksum + license nếu có): detector/model chính đang chờ module của thành viên phụ trách. Phiên bản, checksum và license phải được bổ sung trước demo; pipeline không được tự tải model hay gọi API ngoài.
+- Thành phần offline (model/weights + checksum + license nếu có): PoC hiện không dùng model/weights tải ngoài. Detector dùng OpenCV 5.0.0 với contour, morphology, heuristic cạnh/hình dạng cho plate và fallback hình dạng synthetic cho face; OpenCV 4.5.0+ dùng Apache-2.0. Không có checksum weights vì không có file weights. Giới hạn bắt buộc: detector này fixture-oriented, không được coi là đã xác nhận trên người/biển số thật.
 - Trade-offs đã cân nhắc: tăng padding giúp giảm bỏ sót pixel PII nhưng làm tăng over-redaction; detector nhạy giúp tăng recall nhưng tạo thêm false positive và tải review; blur toàn ảnh có thể đạt miss rate thấp nhưng vi phạm guardrail về over-redaction và không được dùng làm PoC chính.
 
 ## 04 · Baseline vs PoC
 
-- Baseline (mô tả, version/config, commit): ____
-- PoC (mô tả, version/config, commit): ____
-- Cùng budget / cùng heldout / cùng seed: xác nhận ____
+- Baseline (mô tả, version/config, commit): `src/t07_baseline.py`, detector OpenCV offline + fixed padding, không human review; có thêm blur-all guardrail baseline; commit `1ad7e5d`.
+- PoC (mô tả, version/config, commit): pipeline 5 bước detect → validate/rank top-15 → human review → re-export → decision; commit tích hợp `77bac99`, review thật của Huỳnh Ngọc Gia Hân.
+- Cùng budget / cùng heldout / cùng seed: xác nhận cùng fixture/split eval, coverage 0.9, seed 42; baseline không review, PoC dùng budget B=15.
 
 **Bảng 1 · Baseline vs PoC & hard slices** — dán output của
 `python -m src.compare reports/metrics_baseline.json reports/metrics_poc.json`:
 
 | Metric (unit) | Baseline | PoC | Δ & chú thích |
 |---|---|---|---|
-| Primary: ______ | ____ | ____ | ____; higher/lower? |
-| Hard-slice: ______ | ____ | ____ | ____; N=__ |
-| Review@B / miss / FP | ____ | ____ | ____; B=__ |
-| Runtime / 100 items | ____ | ____ | ____; CPU=__ |
+| Primary: PII Miss Rate | 0.3304347826 | 0.3304347826 | 0.0000; lower tốt hơn; chỉ là đánh giá CVAT nội bộ |
+| Hard-slice: type=plate | 0.7500000000 | 0.7500000000 | 0.0000; N=44; hard slice lớn nhất |
+| Review@B / decision | Không review | 15 reviewed: 3 approve, 10 reject, 2 escalate | B=15; pending=0; decision REWORK vì escalation |
+| Runtime / 100 items | 0.7628 s | 2.0832 s | AMD64 Windows 11, Python 3.14.10; một lần chạy, không gồm thời gian người duyệt |
 
 ## 05 · Evaluation protocol
 
-> Đánh giá nội bộ bằng nhãn CVAT của nhóm, chưa phải GT chính thức. PoC hiện là `poc_prereview`, chưa hoàn tất human review.
+> Đánh giá nội bộ bằng nhãn CVAT của nhóm, chưa phải GT chính thức. PoC hiện là `poc_reviewed`; 15/15 item đã được Huỳnh Ngọc Gia Hân review, trong đó có 2 escalation nên quyết định vận hành vẫn là REWORK.
 
 - Pham vi: 24 anh eval, 115 vung nhan CVAT. Nhan co the thieu/trung; manual counts ghi 130 vung PII tren 24 anh nay. Khong coi 115 la tong PII thuc te da duoc xac nhan.
 - Coverage cua moi vung nhan = pixel giao voi hop bbox redaction / pixel cua vung nhan. PII Miss Rate = so vung coverage < 0.9 / tong vung can redact. Don vi: vung PII; lower is better.
 - TP=77; FN=38; denominator=115. Miss rate=0.3304347826. Day la TP/FN theo coverage, khong phai ghep IoU. Evaluator khong tinh FP theo so bbox.
-- Over-redaction = pixel da che ngoai hop vung nhan / tong pixel da che = 85203/129085 = 0.6600534532. Guardrail <=0.3: FAIL. Khong ket luan primary dat yeu cau. Nhan thieu co the lam tang over-redaction do duoc.
-- Co dinh config truoc eval: coverage=0.9; guardrail=0.3; seed=42; review budget toi da B=15. Khong dieu chinh tham so theo ket qua eval. Baseline khong review; PoC con 15 pending, chua co review that.
+- Over-redaction PoC sau review = pixel da che ngoai hop vung nhan / tong pixel da che = 80258/124140 = 0.6465120026. Baseline = 0.6600534532; review giảm 0.0135414506 nhưng guardrail <=0.3 vẫn FAIL. Không kết luận primary đạt yêu cầu. Nhãn thiếu có thể làm tăng over-redaction đo được.
+- Co dinh config truoc eval: coverage=0.9; guardrail=0.3; seed=42; review budget toi da B=15. Khong dieu chinh tham so theo ket qua eval. Baseline không review; PoC đã review 15/15, pending=0, gồm 3 approve, 10 reject, 2 escalate.
 - Do bat dinh: Wilson CI 95%=[0.2511709254; 0.4206607705]. Image-cluster bootstrap CI 95%=[0.2314444444; 0.4237288136], 2000 lan, seed=42. Wilson gia dinh cac vung doc lap; bootstrap lay mau co hoan lai 24 anh, giu cum vung trong anh. CI khong khac phuc sai lech nhan.
 - GT chi duoc doc trong evaluation/report, khong doc trong production pipeline.
 - Lệnh tái tạo metric, slice, CI và bảng so sánh sau khi đã chạy Baseline/PoC theo [hướng dẫn QA](t07_qa/README.md):
@@ -80,16 +80,16 @@
 
 ```powershell
 .\.venv\Scripts\python.exe -m src.evaluate --track t07 --gt out/t07_internal_eval/gt_regions.csv --split eval --pred out/baseline/redactions.csv --run-name baseline --out reports/t07_qa/evaluator_baseline.json
-.\.venv\Scripts\python.exe -m src.evaluate --track t07 --gt out/t07_internal_eval/gt_regions.csv --split eval --pred out/poc/redactions.csv --run-name poc_prereview --out reports/t07_qa/evaluator_poc.json
+.\.venv\Scripts\python.exe -m src.evaluate --track t07 --gt out/t07_internal_eval/gt_regions.csv --split eval --pred out/poc/redactions.csv --run-name poc_reviewed --out reports/t07_qa/evaluator_poc.json
 ```
 
 Các file `evaluator_*.json` là output trực tiếp dùng nhãn nội bộ. Script báo cáo bổ sung trạng thái nhãn, hash và runtime vào các file `reports/metrics_*.json` chuẩn để truy nguyên.
 
 ## 06 · Result slices
 
-Baseline/PoC là PII Miss Rate (fraction); N là số vùng nhãn CVAT, không phải số ảnh. Cột PoC là kết quả trước human review, chưa phải kết quả cuối của nhóm.
+Baseline/PoC là PII Miss Rate (fraction); N là số vùng nhãn CVAT, không phải số ảnh. Cột PoC là kết quả sau human review; nhãn CVAT nội bộ không phải GT chính thức.
 
-| Slice | N | Baseline | PoC truoc review | Ghi chu |
+| Slice | N | Baseline | PoC sau review | Ghi chu |
 |---|---:|---:|---:|---|
 | all | 115 | 0.3304347826 | 0.3304347826 | 38 miss |
 | type=face | 71 | 0.0704225352 | 0.0704225352 | 5 miss |
@@ -103,14 +103,15 @@ Baseline/PoC là PII Miss Rate (fraction); N là số vùng nhãn CVAT, không p
 - Ảnh minh chứng failure case 2: [pii_01, cvat:8](t07_qa/evidence/plate_pii_01_cvat_8.png).
 - Vấn đề chất lượng nhãn riêng: `pii_03 / cvat:14` được gán `face` nhưng khung nằm trên áo. Cần xác minh nhãn; **không dùng case này để khẳng định detector bỏ sót khuôn mặt**. Nhãn vẫn được giữ nguyên trong phép tính. [Ảnh nhãn nghi sai](t07_qa/evidence/face_pii_03_cvat_14.png).
 - Size tính từ diện tích bbox nhãn CVAT: small <1024 px²; medium từ 1024 đến dưới 9216 px²; large ≥9216 px². Condition chưa có nhãn đáng tin cậy nên ghi `unknown`.
-- May: Windows-11-10.0.26300-SP0; Python 3.12.7; CPU: Intel64 Family 6 Model 141 Stepping 1, GenuineIntel.
-- Baseline: 0.3456 s / 60 anh = 5.760000 ms/anh. PoC: 0.7182 s / 60 anh = 11.970000 ms/anh. Mot lan do runtime pipeline tren toan bo 60 anh; khong gom thoi gian human review, khong phai benchmark rieng detector. Số liệu từ `reports/metrics_baseline.json` và `reports/metrics_poc.json`.
-- Production decision=REWORK/REVIEW_PENDING. GO cua code la trang thai review/van hanh, khong thay cho ket luan chat luong metric.
+- May: Windows-11-10.0.26200-SP0; Python 3.14.10; CPU: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD.
+- Baseline: 0.4577 s / 60 anh = 7.628333 ms/anh. PoC reviewed: 1.2499 s / 60 anh = 20.831667 ms/anh. Mot lan do runtime pipeline tren toan bo 60 anh; khong gom thoi gian human review, khong phai benchmark rieng detector. Số liệu từ `reports/metrics_baseline.json` và `reports/metrics_poc.json`.
+- Production decision=`REWORK/REVIEW_ESCALATED`: pending=0 nhưng còn 2 escalation (`poc:pii_54:000`, `poc:pii_45:003`). Đây là hành vi fail-safe đúng policy; không tự đổi reviewer decision để lấy GO.
 
 ## 07 · Human & decision
 
 - Review queue (file, B, cách ưu tiên): `out/poc/review_queue.csv`, tối đa 15 vùng; score cao hơn cho confidence thấp, box nhỏ/sát biên và ảnh tối, mờ hoặc có dấu hiệu detector không ổn định.
 - Cách override + audit log (`out/poc/audit_log.jsonl`): reviewer có thể `approve`, `reject`, `edit`, `escalate` hoặc `skip`; mọi reject/edit/escalate phải lưu reviewer, action, region ID, before, after, reason và timestamp trong audit log append-only.
+- Bằng chứng review đã lưu tại `reports/t07_review/`: CSV gốc có SHA-256 `C6C163EE88B82D2D3B4967C56AF595048107953E8DC2E5D5428E8B5520E4F205`; 15/15 item có reviewer `han`, không có stale/pending, kết quả 3 approve, 10 reject, 2 escalate.
 - Decision policy + `reason_code` + owner: owner cấu hình là `Nguyen Thanh Phong (Data Owner)`; `reason_code` cụ thể sẽ được sinh theo lỗi provenance/schema/offline, bbox/review/audit chưa đạt hoặc QA pass. Decision runtime không dùng hidden PII Miss Rate vì production pipeline không được đọc GT.
 - Khi nào HOLD/REWORK thay vì tự động release: HOLD cho lỗi điều kiện tiên quyết hoặc vi phạm governance; REWORK cho lỗi có thể sửa trong bbox/review/audit/export; chỉ GO khi tất cả kiểm tra vận hành đã pass.
 
@@ -123,8 +124,8 @@ python -m src.evaluate --track t__ --pred out/<file> --out reports/metrics_poc.j
 pytest -q
 ```
 
-- Output của `pytest -q`: ____
-- Máy / CPU / OS / Python: ____ · git sha: ____
+- Output của `pytest -q`: exit code 0 trên `origin/main` tại `3c6e312`; toàn bộ test pass, các test tùy chọn được skip.
+- Máy / CPU / OS / Python: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD · Windows-11-10.0.26200-SP0 · Python 3.14.10 · git sha: `3c6e312`.
 
 ## 09 · Limitations & ethics
 
@@ -139,25 +140,28 @@ pytest -q
 
 | Học viên | Git author/email | Module / vai trò | Commit SHA / diff chứng minh | Trình bày? |
 |---|---|---|---|---|
-| Người 1 — để trống | | Detector, redactor & ranking | Chờ branch/commit | |
-| Nguyễn Thanh Phong | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | Chờ branch/commit | |
-| Huỳnh Ngọc Gia Hân  | `suadaunanh <huynh.han.ctc@gmail.com>` | Human review, audit & export | [Commit 390b60f ](https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy/commit/390b60f7c85bf4248ba67f59230a7054a4639747) | |
-| Người 4 — để trống | | QA, metric & failure analysis | Chờ branch/commit | |
-| Nguyễn Nhật Minh | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, report & demo | `8f1f13a` — integration contract, validation schema và demo plan | |
+| Phạm Anh Tuấn — 2A202603232 | `AnhTuan2003ml <tuankkffdnc@gmail.com>` | Detector prototype & report materials | `a7e889a` trên `origin/phong` — prototype detector/pipeline/test trong `reports/tai_lieu_bao_cao_t07/`; production fallback được tích hợp riêng bởi Nguyễn Nhật Minh | |
+| Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | `1ad7e5d` — offline baseline, blur-all và data protocol | |
+| Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review thật 15 item | |
+| Lương Văn Quyến — 2A202603226 | `VanQuyen11 <quyenluong2k4@gmail.com>` | QA, metric & failure analysis | `0042807`, `e35a73e` — integration QA, internal CVAT metrics, failure evidence | |
+| Nguyễn Nhật Minh — 2A202603210 | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, detector fallback, report & demo | `830338b` — contract/demo; `77bac99` — integrated T07 pipeline and detector fallback | |
 | Member 6 (nếu có) | | Research / ablation / debate | | |
 
 ## 11 · References
 
 | URL | Ngày xem | 1–2 dòng ý nghĩa (không chép nguyên văn) |
 |---|---|---|
-| | | |
+| https://docs.opencv.org/doc/doxygen/html/dd/d49/tutorial_py_contour_features.html | 15/11/2026 | API contour/geometry làm cơ sở cho heuristic shape và bbox của detector offline. |
+| https://docs.opencv.org/5.0/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html | 15/11/2026 | Opening/closing và structuring element được dùng để làm sạch/nối vùng candidate trên ảnh. |
+| https://opencv.org/license/ | 15/11/2026 | Xác nhận OpenCV 4.5.0+ dùng giấy phép Apache-2.0. |
+| https://www.edpb.europa.eu/documents/guideline/guidelines-012025-on-pseudonymisation_en | 15/11/2026 | Cơ sở để mô tả output là redacted/pseudonymised và không tuyên bố anonymisation tuyệt đối. |
 
 ---
 
 **Bảng 3 · Checklist chốt khi nộp**
 
 - [ ] Link repo và tag cuối cùng trong README; input mẫu không chứa PII thật.
-- [ ] Đúng 1 lệnh run, 1 lệnh evaluate, 1 lệnh tests; không cần download khi chạy.
-- [ ] Có baseline/PoC metrics, ≥1 failure case, reviewer evidence, decision log.
-- [ ] Có license/source provenance, data splits, seed, offline environment, GT/eval N.
-- [ ] Mỗi thành viên có ≥1 commit thực chất và được nêu minh bạch trong bảng trên.
+- [x] Đúng 1 lệnh run, 1 lệnh evaluate, 1 lệnh tests; không cần download khi chạy.
+- [x] Có baseline/PoC metrics, ≥1 failure case, reviewer evidence, decision log.
+- [x] Có license/source provenance, data splits, seed, offline environment, GT/eval N.
+- [x] Mỗi thành viên có ≥1 commit thực chất và được nêu minh bạch trong bảng trên; commit của Phạm Anh Tuấn nằm trên `origin/phong` và được mô tả đúng là prototype/materials.
