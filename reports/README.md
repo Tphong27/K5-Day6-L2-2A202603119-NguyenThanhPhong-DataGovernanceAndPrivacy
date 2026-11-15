@@ -20,5 +20,9 @@ Xem [t07_qa/README.md](t07_qa/README.md) để chạy test, Baseline, PoC và
 thư mục này, còn slice/CI và ảnh minh chứng nằm trong `t07_qa/`.
 
 Các file có `evaluation_status=INTERNAL_CVAT_NOT_OFFICIAL` dùng nhãn CVAT của
-nhóm, không phải GT chính thức. `run_name=poc_prereview` nghĩa là chưa hoàn tất
-human review. Không dùng các kết quả này để tuyên bố đã đạt đánh giá chính thức.
+nhóm, không phải GT chính thức. Kết quả hiện tại là `run_name=poc_reviewed` với
+15/15 item đã được quyết định và operational decision `GO`. Không dùng GO này
+để tuyên bố đã đạt đánh giá chính thức: over-redaction guardrail nội bộ vẫn fail.
+
+Xem [SUBMISSION.md](SUBMISSION.md) cho trạng thái nộp, lệnh tái tạo và các mục
+chưa xác định; xem [t07_review/](t07_review/) cho bằng chứng review cuối.

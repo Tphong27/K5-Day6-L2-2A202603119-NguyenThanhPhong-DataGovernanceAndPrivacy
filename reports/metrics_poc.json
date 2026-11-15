@@ -1,12 +1,12 @@
 {
   "run_name": "poc_reviewed",
   "track": "t07",
-  "created_at": "2026-11-15T06:12:26+00:00",
-  "git_sha": "3c6e312",
+  "created_at": "2026-11-15T06:25:34+00:00",
+  "git_sha": "594d092",
   "seed": 42,
   "n_items": 60,
-  "runtime_seconds": 1.2499,
-  "runtime_per_100_items_s": 2.0832,
+  "runtime_seconds": 1.3101,
+  "runtime_per_100_items_s": 2.1835,
   "machine": {
     "python": "3.14.10",
     "platform": "Windows-11-10.0.26200-SP0",
@@ -155,22 +155,19 @@
     "labels_sha256": "463772fe8ecf2ca50f73648e4d8da5a9523dfb3e012ef4c68669c7c9f45c5b97",
     "predictions": "out\\poc\\redactions.csv",
     "predictions_sha256": "70bd2f7f29e6eb34546963dae2320d842ed96624475e704a79bfcff913020de5",
-    "inference_git_sha": "3c6e312",
-    "inference_config_hash": "1ddc2577d800",
+    "inference_git_sha": "594d092",
+    "inference_config_hash": "bf7597b3211b",
     "human_review_completed": true,
     "review": {
       "n_reviewed": 15,
-      "approve": 3,
+      "approve": 5,
       "reject": 10,
       "edit": 0,
-      "escalate": 2,
+      "escalate": 0,
       "skip": 0,
       "added": 0,
       "stale": [],
-      "escalated": [
-        "poc:pii_54:000",
-        "poc:pii_45:003"
-      ],
+      "escalated": [],
       "pending": 0
     },
     "notes": [
@@ -185,6 +182,6 @@
       "Separate blur-all runtime not measured"
     ],
     "runtime_image_count": 60,
-    "reporting_git_sha": "3c6e312"
+    "reporting_git_sha": "594d092"
   }
 }

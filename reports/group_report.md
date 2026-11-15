@@ -56,18 +56,18 @@
 |---|---|---|---|
 | Primary: PII Miss Rate | 0.3304347826 | 0.3304347826 | 0.0000; lower tốt hơn; chỉ là đánh giá CVAT nội bộ |
 | Hard-slice: type=plate | 0.7500000000 | 0.7500000000 | 0.0000; N=44; hard slice lớn nhất |
-| Review@B / decision | Không review | 15 reviewed: 3 approve, 10 reject, 2 escalate | B=15; pending=0; decision REWORK vì escalation |
-| Runtime / 100 items | 0.7628 s | 2.0832 s | AMD64 Windows 11, Python 3.14.10; một lần chạy, không gồm thời gian người duyệt |
+| Review@B / decision | Không review | 15 reviewed: 5 approve, 10 reject, 0 escalate | B=15; pending=0; operational decision GO |
+| Runtime / 100 items | 0.7628 s | 2.1835 s | AMD64 Windows 11, Python 3.14.10; một lần chạy, không gồm thời gian người duyệt |
 
 ## 05 · Evaluation protocol
 
-> Đánh giá nội bộ bằng nhãn CVAT của nhóm, chưa phải GT chính thức. PoC hiện là `poc_reviewed`; 15/15 item đã được Huỳnh Ngọc Gia Hân review, trong đó có 2 escalation nên quyết định vận hành vẫn là REWORK.
+> Đánh giá nội bộ bằng nhãn CVAT của nhóm, chưa phải GT chính thức. PoC hiện là `poc_reviewed`; Huỳnh Ngọc Gia Hân review 15/15 item và xác nhận follow-up rằng hai item từng escalation được `approve`; Nguyễn Nhật Minh chỉ chuyển tiếp/ghi nhận quyết định với ghi chú và timestamp riêng. Quyết định vận hành cuối là GO, nhưng guardrail metric nội bộ vẫn FAIL.
 
 - Pham vi: 24 anh eval, 115 vung nhan CVAT. Nhan co the thieu/trung; manual counts ghi 130 vung PII tren 24 anh nay. Khong coi 115 la tong PII thuc te da duoc xac nhan.
 - Coverage cua moi vung nhan = pixel giao voi hop bbox redaction / pixel cua vung nhan. PII Miss Rate = so vung coverage < 0.9 / tong vung can redact. Don vi: vung PII; lower is better.
 - TP=77; FN=38; denominator=115. Miss rate=0.3304347826. Day la TP/FN theo coverage, khong phai ghep IoU. Evaluator khong tinh FP theo so bbox.
 - Over-redaction PoC sau review = pixel da che ngoai hop vung nhan / tong pixel da che = 80258/124140 = 0.6465120026. Baseline = 0.6600534532; review giảm 0.0135414506 nhưng guardrail <=0.3 vẫn FAIL. Không kết luận primary đạt yêu cầu. Nhãn thiếu có thể làm tăng over-redaction đo được.
-- Co dinh config truoc eval: coverage=0.9; guardrail=0.3; seed=42; review budget toi da B=15. Khong dieu chinh tham so theo ket qua eval. Baseline không review; PoC đã review 15/15, pending=0, gồm 3 approve, 10 reject, 2 escalate.
+- Co dinh config truoc eval: coverage=0.9; guardrail=0.3; seed=42; review budget toi da B=15. Khong dieu chinh tham so theo ket qua eval. Baseline không review; PoC cuối đã review 15/15, pending=0, gồm 5 approve, 10 reject, 0 escalate. Hai approval cuối giữ nguyên vùng che nên không làm thay đổi metric so với trạng thái escalation.
 - Do bat dinh: Wilson CI 95%=[0.2511709254; 0.4206607705]. Image-cluster bootstrap CI 95%=[0.2314444444; 0.4237288136], 2000 lan, seed=42. Wilson gia dinh cac vung doc lap; bootstrap lay mau co hoan lai 24 anh, giu cum vung trong anh. CI khong khac phuc sai lech nhan.
 - GT chi duoc doc trong evaluation/report, khong doc trong production pipeline.
 - Lệnh tái tạo metric, slice, CI và bảng so sánh sau khi đã chạy Baseline/PoC theo [hướng dẫn QA](t07_qa/README.md):
@@ -104,14 +104,14 @@ Baseline/PoC là PII Miss Rate (fraction); N là số vùng nhãn CVAT, không p
 - Vấn đề chất lượng nhãn riêng: `pii_03 / cvat:14` được gán `face` nhưng khung nằm trên áo. Cần xác minh nhãn; **không dùng case này để khẳng định detector bỏ sót khuôn mặt**. Nhãn vẫn được giữ nguyên trong phép tính. [Ảnh nhãn nghi sai](t07_qa/evidence/face_pii_03_cvat_14.png).
 - Size tính từ diện tích bbox nhãn CVAT: small <1024 px²; medium từ 1024 đến dưới 9216 px²; large ≥9216 px². Condition chưa có nhãn đáng tin cậy nên ghi `unknown`.
 - May: Windows-11-10.0.26200-SP0; Python 3.14.10; CPU: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD.
-- Baseline: 0.4577 s / 60 anh = 7.628333 ms/anh. PoC reviewed: 1.2499 s / 60 anh = 20.831667 ms/anh. Mot lan do runtime pipeline tren toan bo 60 anh; khong gom thoi gian human review, khong phai benchmark rieng detector. Số liệu từ `reports/metrics_baseline.json` và `reports/metrics_poc.json`.
-- Production decision=`REWORK/REVIEW_ESCALATED`: pending=0 nhưng còn 2 escalation (`poc:pii_54:000`, `poc:pii_45:003`). Đây là hành vi fail-safe đúng policy; không tự đổi reviewer decision để lấy GO.
+- Baseline: 0.4577 s / 60 anh = 7.628333 ms/anh. PoC reviewed cuối: 1.3101 s / 60 anh = 21.835000 ms/anh. Mot lan do runtime pipeline tren toan bo 60 anh; khong gom thoi gian human review, khong phai benchmark rieng detector. Số liệu từ `reports/metrics_baseline.json` và `reports/metrics_poc.json`.
+- Production decision=`GO/REVIEW_COMPLETE`: pending=0, escalation=0, 341 final regions và 0 invalid boxes. Hân xác nhận follow-up approve cho hai item từng escalation; Minh chuyển tiếp/ghi nhận quyết định, giữ nguyên redaction và ghi rõ lý do/timestamp. Operational GO không thay thế kết luận guardrail chất lượng: over-redaction nội bộ vẫn vượt 0.3.
 
 ## 07 · Human & decision
 
 - Review queue (file, B, cách ưu tiên): `out/poc/review_queue.csv`, tối đa 15 vùng; score cao hơn cho confidence thấp, box nhỏ/sát biên và ảnh tối, mờ hoặc có dấu hiệu detector không ổn định.
 - Cách override + audit log (`out/poc/audit_log.jsonl`): reviewer có thể `approve`, `reject`, `edit`, `escalate` hoặc `skip`; mọi reject/edit/escalate phải lưu reviewer, action, region ID, before, after, reason và timestamp trong audit log append-only.
-- Bằng chứng review đã lưu tại `reports/t07_review/`: CSV gốc có SHA-256 `C6C163EE88B82D2D3B4967C56AF595048107953E8DC2E5D5428E8B5520E4F205`; 15/15 item có reviewer `han`, không có stale/pending, kết quả 3 approve, 10 reject, 2 escalate.
+- Bằng chứng review đã lưu tại `reports/t07_review/`: CSV bàn giao gốc có SHA-256 `C6C163EE88B82D2D3B4967C56AF595048107953E8DC2E5D5428E8B5520E4F205`; CSV cuối có SHA-256 `78C11E7DBB0329A020A2F4BD3437068EDA3293DC2B10CB743DED9EA4DDFF84A7` và ghi follow-up approval của Hân được Minh chuyển tiếp. Kết quả cuối: 5 approve, 10 reject, 0 escalate/pending/stale.
 - Decision policy + `reason_code` + owner: owner cấu hình là `Nguyen Thanh Phong (Data Owner)`; `reason_code` cụ thể sẽ được sinh theo lỗi provenance/schema/offline, bbox/review/audit chưa đạt hoặc QA pass. Decision runtime không dùng hidden PII Miss Rate vì production pipeline không được đọc GT.
 - Khi nào HOLD/REWORK thay vì tự động release: HOLD cho lỗi điều kiện tiên quyết hoặc vi phạm governance; REWORK cho lỗi có thể sửa trong bbox/review/audit/export; chỉ GO khi tất cả kiểm tra vận hành đã pass.
 
@@ -142,7 +142,7 @@ pytest -q
 |---|---|---|---|---|
 | Phạm Anh Tuấn — 2A202603232 | `AnhTuan2003ml <tuankkffdnc@gmail.com>` | Detector prototype & report materials | `a7e889a` trên `origin/phong` — prototype detector/pipeline/test trong `reports/tai_lieu_bao_cao_t07/`; production fallback được tích hợp riêng bởi Nguyễn Nhật Minh | |
 | Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | `1ad7e5d` — offline baseline, blur-all và data protocol | |
-| Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review thật 15 item | |
+| Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review ban đầu 15 item | |
 | Lương Văn Quyến — 2A202603226 | `VanQuyen11 <quyenluong2k4@gmail.com>` | QA, metric & failure analysis | `0042807`, `e35a73e` — integration QA, internal CVAT metrics, failure evidence | |
 | Nguyễn Nhật Minh — 2A202603210 | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, detector fallback, report & demo | `830338b` — contract/demo; `77bac99` — integrated T07 pipeline and detector fallback | |
 | Member 6 (nếu có) | | Research / ablation / debate | | |

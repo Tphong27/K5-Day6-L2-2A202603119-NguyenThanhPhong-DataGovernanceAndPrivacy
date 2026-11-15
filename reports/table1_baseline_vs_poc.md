@@ -1,6 +1,6 @@
 > INTERNAL CVAT EVALUATION ONLY. Check run_name/review status; not official GT.
 
-Baseline: `baseline` (git 3c6e312, seed 42) · PoC: `poc_reviewed` (git 3c6e312, seed 42)
+Baseline: `baseline` (git 594d092, seed 42) · PoC: `poc_reviewed` (git 594d092, seed 42)
 
 | Metric (unit) | Slice | Baseline | PoC | Δ abs | Δ rel | Better | N |
 |---|---|---|---|---|---|---|---|
@@ -14,4 +14,4 @@ Baseline: `baseline` (git 3c6e312, seed 42) · PoC: `poc_reviewed` (git 3c6e312,
 | PII Miss Rate (fraction) | size=small | 0.3426 | 0.3426 | 0.0000 | +0.0% | lower | 108 |
 | PII Miss Rate (fraction) | size=medium | 0.1429 | 0.1429 | 0.0000 | +0.0% | lower | 7 |
 | PII Miss Rate (fraction) | size=large | n/a | n/a | n/a | n/a | lower | 0 |
-| Runtime / 100 items (s) | all | 0.7628 | 2.0832 | | | lower | |
+| Runtime / 100 items (s) | all | 0.7628 | 2.1835 | | | lower | |

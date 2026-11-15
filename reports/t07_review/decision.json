@@ -1,7 +1,7 @@
 {
-  "status": "REWORK",
-  "reason_code": "REVIEW_ESCALATED",
-  "reason": "2 queued regions were escalated.",
+  "status": "GO",
+  "reason_code": "REVIEW_COMPLETE",
+  "reason": "All queued regions were reviewed with no escalation.",
   "owner": "Nguyen Thanh Phong (Data Owner)",
   "scope": "t07-poc",
   "evidence": [
@@ -10,8 +10,9 @@
     "out/poc/audit_log.jsonl"
   ],
   "metrics": {
-    "escalated": 2,
-    "pending": 0
+    "final_regions": 341,
+    "pending": 0,
+    "escalated": 0
   },
-  "canonical": "REWORK"
+  "canonical": "GO"
 }
