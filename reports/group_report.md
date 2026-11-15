@@ -10,7 +10,7 @@
 |---|---|
 | Group ID | 2A202603119 |
 | Challenge | T07 · Automatic Face/Plate Redaction + Review Queue |
-| Thành viên (5–6) + vai trò | 1. ____ (Detector/redactor/ranking) · 2. Nguyễn Thanh Phong (Baseline & data protocol) · 3. ____ (Human review, audit & export) · 4. Lương Văn Quyến (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh (Lead integration, decision, report & demo) |
+| Thành viên (5–6) + vai trò | 1. ____ (Detector/redactor/ranking) · 2. Nguyễn Thanh Phong (Baseline & data protocol) · 3. Huỳnh Ngọc Gia Hân (Human review, audit & export) · 4. Lương Văn Quyến (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh (Lead integration, decision, report & demo) |
 | Git URL | https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy |
 | Tag `demo-180m` (commit) | ____ |
 | Tag `final-24h` (commit) | ____ |
@@ -141,7 +141,7 @@ pytest -q
 |---|---|---|---|---|
 | Người 1 — để trống | | Detector, redactor & ranking | Chờ branch/commit | |
 | Nguyễn Thanh Phong | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | Chờ branch/commit | |
-| Người 3 — để trống | | Human review, audit & export | Chờ branch/commit | |
+| Huỳnh Ngọc Gia Hân  | `suadaunanh <huynh.han.ctc@gmail.com>` | Human review, audit & export | [Commit 390b60f ](https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy/commit/390b60f7c85bf4248ba67f59230a7054a4639747) | |
 | Người 4 — để trống | | QA, metric & failure analysis | Chờ branch/commit | |
 | Nguyễn Nhật Minh | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, report & demo | `8f1f13a` — integration contract, validation schema và demo plan | |
 | Member 6 (nếu có) | | Research / ablation / debate | | |
