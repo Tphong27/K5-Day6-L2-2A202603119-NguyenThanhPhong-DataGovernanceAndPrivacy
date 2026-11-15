@@ -4,31 +4,14 @@
 > (`reports/metrics_*.json`, `reports/table1_baseline_vs_poc.md`) — không gõ tay, không làm tròn mất đơn vị.
 > 3–5 trang (hoặc README + report.md tương đương).
 
-## CẦN BẠN XÁC NHẬN TRƯỚC KHI NỘP
+## Thông tin đã được Nguyễn Nhật Minh xác nhận
 
-Các mục dưới đây không thể suy ra chắc chắn từ code hoặc Git. Nguyễn Nhật Minh
-cần xác nhận/điền trực tiếp; sau khi xác nhận thì xóa nhãn này:
-
-- [ ] **[CẦN XÁC NHẬN 1 — quyết định review]** Hân đã yêu cầu `approve` cho **cả hai** item
-  `poc:pii_54:000` và `poc:pii_45:003`, không chỉ một item.
-- [ ] **[CẦN XÁC NHẬN 2 — lý do review]** Nội dung ghi nhận hiện tại là “giữ vùng che
-  theo hướng fail-safe”. Hân chưa cung cấp lý do chi tiết khác; xác nhận có giữ nguyên
-  cách diễn đạt này không.
-- [ ] **[CẦN XÁC NHẬN 3 — Data Owner]** Người ký quyết định cuối là
-  `Nguyen Thanh Phong (Data Owner)` đúng với phân công thực tế của nhóm.
-- [ ] **[CẦN XÁC NHẬN 4 — contribution của Tuấn]** Nhóm đồng ý mô tả commit `a7e889a`
-  của Phạm Anh Tuấn là “detector prototype/report materials”, còn production fallback
-  nằm trong commit tích hợp của Nguyễn Nhật Minh.
-- [ ] **[CẦN ĐIỀN 5 — deadline]** Deadline chính xác theo giờ Việt Nam: `CHƯA CUNG CẤP`.
-- [ ] **[CẦN ĐIỀN 6 — presenter]** Thành viên thuyết trình/demo: `CHƯA CHỐT`.
-- [ ] **[CẦN QUYẾT ĐỊNH 7 — tag]** Có cần tạo `demo-180m` và `final-24h` không;
-  nếu có, chỉ tạo `final-24h` sau khi PR cuối đã merge và kiểm tra `main`.
-- [ ] **[CẦN XÁC NHẬN 8 — file nộp]** Giảng viên có yêu cầu file submission riêng
-  hay chỉ `reports/group_report.md`; hiện nhóm đã chuẩn bị thêm `reports/SUBMISSION.md`.
-
-Các mục **không cần xác nhận lại** vì đã có bằng chứng máy chạy: preflight/test exit 0,
-60 ảnh, 351 candidates, 341 final regions, 0 invalid boxes, review 5 approve/10 reject,
-decision GO, metrics nội bộ và over-redaction guardrail FAIL.
+- Hân xác nhận `approve` cho cả `poc:pii_54:000` và `poc:pii_45:003`; lý do lưu hồ sơ là giữ vùng che theo hướng fail-safe.
+- Nguyễn Thanh Phong là Data Owner/người ký quyết định cuối.
+- Cách ghi contribution của Tuấn đã được nhóm chấp nhận: commit `a7e889a` là detector prototype/report materials; production fallback do Nguyễn Nhật Minh tích hợp.
+- Deadline: **12:00 ngày 15/11/2026, giờ Việt Nam (UTC+7)**.
+- Nhóm đã demo và được bonus point. Tên cá nhân presenter không được cung cấp; báo cáo chỉ ghi nhận ở cấp nhóm.
+- Giảng viên không yêu cầu tag `demo-180m`/`final-24h` và không yêu cầu file submission riêng. `reports/SUBMISSION.md` chỉ là checklist bổ sung nội bộ.
 
 ## 00 · Header
 
@@ -38,7 +21,9 @@ decision GO, metrics nội bộ và over-redaction guardrail FAIL.
 | Challenge | T07 · Automatic Face/Plate Redaction + Review Queue |
 | Thành viên (5–6) + vai trò | 1. Phạm Anh Tuấn — 2A202603232 (Detector prototype/materials) · 2. Nguyễn Thanh Phong — 2A202603119 (Baseline & data protocol) · 3. Huỳnh Ngọc Gia Hân — 2A202603128 (Human review, audit & export) · 4. Lương Văn Quyến — 2A202603226 (QA, metric & failure analysis) · 5. Nguyễn Nhật Minh — 2A202603210 (Lead integration, decision, report & demo) |
 | Git URL | https://github.com/Tphong27/K5-Day6-L2-2A202603119-NguyenThanhPhong-DataGovernanceAndPrivacy |
-
+| Deadline | 12:00 ngày 15/11/2026 (UTC+7) |
+| Demo | Đã hoàn thành và được bonus point; không ghi nhận presenter cá nhân |
+| Tag / submission riêng | Không được yêu cầu; `SUBMISSION.md` là checklist bổ sung |
 
 ## 01 · Problem statement
 
@@ -155,6 +140,8 @@ pytest -q
 
 - Rủi ro pháp lý / PII / license: bỏ sót mặt/biển số có thể làm lộ dữ liệu cá nhân; ảnh raw không được đưa lên cloud hoặc repository công khai; model/weights phải được ghi nguồn, phiên bản, checksum và license trước khi sử dụng.
 - Điều chưa biết; false alarms; nếu scale 10× thì sao: hiệu năng trên dữ liệu synthetic không bảo đảm tổng quát cho ảnh thật; false positive và padding lớn làm giảm utility; khi dữ liệu tăng 10× cần đo lại throughput, dung lượng ảnh đầu ra, kích thước review queue và năng lực reviewer.
+- Hai approval follow-up cần thận trọng: `poc:pii_54:000` có metadata `face` nhưng note ban đầu là `plate` và box nằm gần biển báo/pole; `poc:pii_45:003` có metadata `face` nhưng box nằm gần vùng xe/đèn. Nhóm giữ quyết định approve theo xác nhận của reviewer để hoàn tất workflow, nhưng hai item này cần second review hoặc sửa `type`/box trước khi dùng cho release dữ liệu thật.
+- Decision `GO/REVIEW_COMPLETE` chỉ là operational gate. Vì internal CVAT over-redaction = 0.6465120026 > 0.3 và PII Miss Rate plate = 0.75, hệ thống **không đạt quality gate nội bộ**; release thực tế nên tiếp tục HOLD/REWORK cho tới khi detector được cải thiện và đánh giá bằng GT chính thức.
 - Không tuyên bố "đạt GDPR / luật Việt Nam" từ checklist tự động; giả định cần DPO/legal xác nhận: output được mô tả là redacted/pseudonymised, không phải anonymised được bảo đảm. Cơ sở pháp lý, quyền truy cập, retention, mục đích sử dụng và quy trình xử lý sự cố cần DPO/legal/domain owner phê duyệt.
 - Kế hoạch cải tiến: đánh giá theo slice `face/plate`, `normal/small/dark/blur/occluded` và kích thước; hiệu chỉnh padding/threshold trên dev; bổ sung failure tests; đo runtime; cải thiện ranking để budget 15 tập trung vào vùng rủi ro nhất.
 
@@ -162,13 +149,15 @@ pytest -q
 
 **Bảng 2 · Individual contribution evidence** (đối chiếu với `git shortlog -sne --all` và `reports/team_contributions.csv`)
 
+Nhóm xác nhận đã demo và được bonus point; không cung cấp tên presenter cá nhân nên cột cuối ghi ở mức “không ghi nhận”.
+
 | Học viên | Git author/email | Module / vai trò | Commit SHA / diff chứng minh | Trình bày? |
 |---|---|---|---|---|
-| Phạm Anh Tuấn — 2A202603232 | `AnhTuan2003ml <tuankkffdnc@gmail.com>` | Detector prototype & report materials | `a7e889a` trên `origin/phong` — prototype detector/pipeline/test trong `reports/tai_lieu_bao_cao_t07/`; production fallback được tích hợp riêng bởi Nguyễn Nhật Minh | |
-| Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | `1ad7e5d` — offline baseline, blur-all và data protocol | |
-| Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review ban đầu 15 item | |
-| Lương Văn Quyến — 2A202603226 | `VanQuyen11 <quyenluong2k4@gmail.com>` | QA, metric & failure analysis | `0042807`, `e35a73e` — integration QA, internal CVAT metrics, failure evidence | |
-| Nguyễn Nhật Minh — 2A202603210 | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, detector fallback, report & demo | `830338b` — contract/demo; `77bac99` — integrated T07 pipeline and detector fallback | |
+| Phạm Anh Tuấn — 2A202603232 | `AnhTuan2003ml <tuankkffdnc@gmail.com>` | Detector prototype & report materials | `a7e889a` trên `origin/phong` — prototype detector/pipeline/test trong `reports/tai_lieu_bao_cao_t07/`; production fallback được tích hợp riêng bởi Nguyễn Nhật Minh | Không ghi nhận |
+| Nguyễn Thanh Phong — 2A202603119 | `Nguyen Thanh Phong(K18) <phongnthe182099@fpt.edu.vn>` | Baseline & data protocol | `1ad7e5d` — offline baseline, blur-all và data protocol | Không ghi nhận |
+| Huỳnh Ngọc Gia Hân — 2A202603128 | `Huynh Ngoc Gia Han <huynh.han.ctc@gmail.com>` | Human review, audit & export | `01e1b2e` — review/audit/re-export; `06a4b92` — evidence/report; review ban đầu 15 item | Không ghi nhận |
+| Lương Văn Quyến — 2A202603226 | `VanQuyen11 <quyenluong2k4@gmail.com>` | QA, metric & failure analysis | `0042807`, `e35a73e` — integration QA, internal CVAT metrics, failure evidence | Không ghi nhận |
+| Nguyễn Nhật Minh — 2A202603210 | `nminnnnn <nminnnnn@users.noreply.github.com>` | Lead integration, decision policy, detector fallback, report & demo | `830338b` — contract/demo; `77bac99` — integrated T07 pipeline and detector fallback | Không ghi nhận |
 | Member 6 (nếu có) | | Research / ablation / debate | | |
 
 ## 11 · References
@@ -184,7 +173,7 @@ pytest -q
 
 **Bảng 3 · Checklist chốt khi nộp**
 
-- [ ] Link repo và tag cuối cùng trong README; input mẫu không chứa PII thật.
+- [x] Link repo có trong báo cáo; nhóm xác nhận không yêu cầu tag; input mẫu synthetic không chứa PII thật.
 - [x] Đúng 1 lệnh run, 1 lệnh evaluate, 1 lệnh tests; không cần download khi chạy.
 - [x] Có baseline/PoC metrics, ≥1 failure case, reviewer evidence, decision log.
 - [x] Có license/source provenance, data splits, seed, offline environment, GT/eval N.

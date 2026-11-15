@@ -1,19 +1,13 @@
 # T07 submission status
 
-## CẦN NGUYỄN NHẬT MINH XÁC NHẬN
+## Thông tin owner đã xác nhận
 
-- [ ] Hân approve cả `poc:pii_54:000` và `poc:pii_45:003`.
-- [ ] Chấp nhận ghi lý do hai approval là giữ redaction theo hướng fail-safe; chưa có
-  lời giải thích chi tiết khác trực tiếp từ Hân.
-- [ ] Nguyễn Thanh Phong là Data Owner/người ký quyết định cuối.
-- [ ] Đồng ý cách ghi đóng góp của Phạm Anh Tuấn: commit `a7e889a` là prototype/materials,
-  production detector fallback do Nguyễn Nhật Minh tích hợp.
-- [ ] Điền deadline chính xác theo giờ Việt Nam.
-- [ ] Chốt người thuyết trình/demo.
-- [ ] Xác nhận có cần hai tag `demo-180m`, `final-24h` hay không.
-- [ ] Xác nhận giảng viên có cần `SUBMISSION.md` riêng hay chỉ cần `group_report.md`.
-
-Những số liệu kỹ thuật còn lại đã được script/test xác minh, không cần xác nhận thủ công.
+- Hân approve cả `poc:pii_54:000` và `poc:pii_45:003`; ghi nhận lý do giữ redaction theo hướng fail-safe.
+- Nguyễn Thanh Phong là Data Owner/người ký quyết định cuối.
+- Contribution của Phạm Anh Tuấn được ghi là prototype/materials tại `a7e889a`; production fallback do Nguyễn Nhật Minh tích hợp.
+- Deadline: 12:00 ngày 15/11/2026 (UTC+7).
+- Nhóm đã demo và được bonus point; không cung cấp tên presenter cá nhân.
+- Không yêu cầu tag và không yêu cầu submission riêng. File này chỉ là checklist bổ sung nội bộ.
 
 ## Nhóm
 
@@ -69,14 +63,13 @@ nghĩa chất lượng model đã PASS và không thay thế đánh giá GT chí
 - `reports/t07_review/`
 - `demo/T07_DEMO_PLAN.md`
 
-## Chưa chắc chắn / chưa hoàn thành
+## Hạn chế và việc còn lại
 
 1. **Official/hidden GT:** chưa có kết quả chính thức của giảng viên. Các metric
    hiện tại dùng nhãn CVAT nội bộ, có thể thiếu/trùng/sai.
 2. **Guardrail chất lượng:** over-redaction nội bộ vẫn vượt 0.3; không được ghi
    model quality PASS dù operational decision là GO.
-3. **Tag:** chưa tạo `demo-180m` và `final-24h`.
-4. **Deadline:** nhóm chưa cung cấp deadline giờ Việt Nam.
-5. **Merge:** nhánh hoàn thiện phải được merge vào `main` trước khi nộp.
-6. **Dữ liệu thật:** detector fixture-oriented, chưa được xác nhận trên ảnh thật.
-7. **Presentation owner:** cột presenter trong contribution table chưa được nhóm chốt.
+3. **Hai approval cần second review trước release thật:** metadata/box của `poc:pii_54:000` và `poc:pii_45:003` không khớp rõ với loại `face`; hiện giữ approve theo xác nhận của Hân để hoàn tất workflow.
+4. **Merge:** nhánh hoàn thiện phải được merge vào `main` trước khi nộp.
+5. **Dữ liệu thật:** detector fixture-oriented, chưa được xác nhận trên ảnh thật.
+6. **Presenter cá nhân:** nhóm chỉ xác nhận đã demo và được bonus; không cung cấp tên người trình bày.
